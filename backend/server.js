@@ -1,7 +1,10 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
-const express  = require('express');
-const cors = require("cors");
+import dotenv from "dotenv";
+dotenv.config();
+import mongoose from "mongoose";
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/routes.js";
+import cookieParser from "cookie-parser";
 
 mongoose.connect(process.env.MONGO_URI)
     .then(()=>console.log("mongoose connected!"))
@@ -11,13 +14,18 @@ mongoose.connect(process.env.MONGO_URI)
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}));
 app.use(express.json());
+app.use(cookieParser());
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req,res)=>{
     res.send("server running successfully!");
 });
-
-app.listen(5000, ()=>{
-    console.log("server running on port 5000");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, ()=>{
+    console.log(`server running on PORT http://localhost:${PORT}`);
 })

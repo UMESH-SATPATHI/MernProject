@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Vehicle from "../models/vehicle.js";
 
 const canManageVehicle = (reqUser, vehicle) => {
@@ -76,10 +77,10 @@ export const createVehicle = async (req, res) => {
     }
 }
 
-export const getVehicles = async (req, res) => {
+export const getAllVehicles = async (req, res) => {
     try {
         const vehicles = await Vehicle.find().sort({ createdAt: -1 });
-        if (!vehicles){
+        if (!vehicles || vehicles.length === 0){
             return res.status(400).json({message: "Vehicle data not found!"});
         }
         return res.status(200).json({message: "fetched vehicle data", vehicles});
@@ -87,5 +88,89 @@ export const getVehicles = async (req, res) => {
         console.log(error);
         return res.status(500).json({ message: "Server error" });
     }
-}
+};
+
+export const getVehicleById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.isValidObjectId(id))
+            return res.status(400).json({ message: "Invalid vehicle id" });
+
+        const vehicle = await Vehicle.findById(id);
+        if (!vehicle)
+            return res.status(404).json({ message: "Vehicle not found" });
+
+        return res.status(200).json({ message: "Vehicle fetched", vehicle });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const updateVehicle = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.isValidObjectId(id))
+            return res.status(400).json({ message: "Invalid vehicle id" });
+
+        const vehicle = await Vehicle.findById(id);
+        if (!vehicle)
+            return res.status(404).json({ message: "Vehicle not found" });
+
+        if (!canManageVehicle(req.user, vehicle))
+            return res.status(403).json({ message: "Access denied" });
+
+        // update text fields
+        const allowedFields = [
+            "vehicleName", "vehicleType", "brand", "model",
+            "description", "price", "location", "isAvailable"
+        ];
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) vehicle[field] = req.body[field];
+        }
+
+        // handle images
+        if (req.body.images !== undefined) {
+            const nextImages = Array.isArray(req.body.images) ? req.body.images : [];
+
+            const hasInvalid = nextImages.some((img) => !img?.url || !img?.publicId);
+            if (hasInvalid)
+                return res.status(400).json({ message: "Each image must include { url, publicId }" });
+
+            if (nextImages.length === 0)
+                return res.status(400).json({ message: "Vehicle must have at least 1 image" });
+
+            vehicle.images = nextImages;
+        }
+
+        await vehicle.save();
+        return res.status(200).json({ message: "Vehicle updated", vehicle });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const deleteVehicle = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.isValidObjectId(id))
+            return res.status(400).json({ message: "Invalid vehicle id" });
+
+        const vehicle = await Vehicle.findById(id);
+        if (!vehicle)
+            return res.status(404).json({ message: "Vehicle not found" });
+
+        if (!canManageVehicle(req.user, vehicle))
+            return res.status(403).json({ message: "Access denied" });
+
+        await vehicle.deleteOne();
+        return res.status(200).json({ message: "Vehicle deleted" });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+
 

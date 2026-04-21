@@ -1,7 +1,7 @@
 import { useState } from "react";
 import authApi from "../services/authService";
 
-const signUp = () => {
+const SignUp = () => {
     let [formData, setFormData] = useState({ name: "", email: "", password: "", role: "" });
     let [message, setMessage] = useState("");
     let [error, setError] = useState(false);
@@ -18,7 +18,7 @@ const signUp = () => {
 
         try {
             let res = await authApi.post("/register", formData);
-            setError("false");
+            setError(false);
             setMessage("Account created");
             setFormData({ name: "", email: "", password: "", role: "" });
         } catch (error) {
@@ -27,7 +27,6 @@ const signUp = () => {
             setMessage(error?.response?.data?.message);
         }
     }
-    console.log(formData);
 
     return (
         <>
@@ -77,4 +76,4 @@ const signUp = () => {
 
 };
 
-export default signUp;
+export default SignUp;

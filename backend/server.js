@@ -5,6 +5,8 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/routes.js";
 import cookieParser from "cookie-parser";
+import cloudinaryRoutes from "./routes/cloudinaryRoutes.js";
+import vehicleRoutes from "./routes/vehicleRoutes.js";
 
 mongoose.connect(process.env.MONGO_URI)
     .then(()=>console.log("mongoose connected!"))
@@ -21,6 +23,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
+app.use("/api/cloudinary", cloudinaryRoutes);
+app.use("/api/vehicles", vehicleRoutes);
 
 app.get("/", (req,res)=>{
     res.send("server running successfully!");

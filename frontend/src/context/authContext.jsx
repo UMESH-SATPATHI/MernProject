@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     async function getCurrentUser() {
         try {
             let res = await authApi.get("/profile");
-            let data = res.data;
+            let data = res.data.user;
             setUser(data);
         } catch (error) {
             console.log(error.response);

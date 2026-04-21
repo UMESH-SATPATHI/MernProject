@@ -7,7 +7,7 @@ const canManageVehicle = (reqUser, vehicle) => {
     //if the requesting user is an admin then they can change the vehicle data
     if (reqUser.role === "admin") return true;
     //if the requesting user is the owner who has added the vehicle then they can update the vehicle data
-    return String(Vehicle.owner) === String(reqUser.user_id);
+    return String(vehicle.owner) === String(reqUser.user_id);
 }
 
 export const createVehicle = async (req, res) => {
@@ -78,12 +78,12 @@ export const createVehicle = async (req, res) => {
 
 export const getVehicles = async (req, res) => {
     try {
-        const vehicles = (await Vehicle.find()).sort({ createdAt: -1 });
+        const vehicles = await Vehicle.find().sort({ createdAt: -1 });
         if (!vehicles){
             return res.status(400).json({message: "Vehicle data not found!"});
         }
         return res.status(200).json({message: "fetched vehicle data", vehicles});
-    } catch (errorf) {
+    } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Server error" });
     }

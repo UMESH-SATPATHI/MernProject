@@ -1,9 +1,9 @@
-import express from "express";
-import { getUploadSignature } from "../controllers/cloudinaryController.js";
-import { verifyToken } from "../controllers/authMiddleware.js";
+// import express from "express";
+// import { getUploadSignature } from "../controllers/cloudinaryController.js";
+// import { verifyToken } from "../middlewares/authMiddleware.js";
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get("/signature", verifyToken, getUploadSignature);
+// router.get("/signature", verifyToken, getUploadSignature);
 
-export default router;
+// export default router;

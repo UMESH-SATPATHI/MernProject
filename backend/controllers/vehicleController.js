@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import Vehicle from "../models/vehicle.js";
+import cloudinary from "../config/cloudinaryConfig.js";
+import fs from "fs";
+import User from "../models/user.js";
 
 const canManageVehicle = (reqUser, vehicle) => {
     if (!reqUser) {
@@ -14,16 +17,18 @@ const canManageVehicle = (reqUser, vehicle) => {
 export const createVehicle = async (req, res) => {
     try {
         const owner = req.user.user_id;
-
+        // const ownerDoc = await User.findById(owner).select("name");
+        // if (!ownerDoc) {
+        //     return res.status(404).json({ message: "Owner not found" });
+        // }
         const {
             vehicleName,
             vehicleType,
             brand,
             model,
             description,
-            price,
+            pricePerDay,
             location,
-            images,
             isAvailable
         } = req.body;
 
@@ -33,38 +38,42 @@ export const createVehicle = async (req, res) => {
             !brand ||
             !model ||
             !description ||
-            price === undefined ||
+            pricePerDay === undefined ||
             !location ||
-            !images ||
             isAvailable === undefined
         ) {
             return res.status(400).json({ message: "All fields are required!" });
         }
 
-        if (!Array.isArray(images) || images.length === 0) {
+        if (!Array.isArray(req.files) || req.files.length === 0) {
             return res.status(400).json({ message: "At least upload 1 image of the vehicle" });
         }
-
-        const normalizedImages = images.map((img) => ({
-            url: img?.url,
-            publicId: img?.publicId,
-        }));
-
-        const hasInvalidImage = normalizedImages.some((img) => !img.url || !img.publicId);
-        if (hasInvalidImage) {
-            return res.status(400).json({
-                message: "Each image must include { url, publicId }",
+        const normalizedImages = [];
+        for (const file of req.files) {
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder: "vehicle_images",
             });
+            normalizedImages.push({
+                url: result.secure_url,
+                publicId: result.public_id,
+            });
+        }
+
+        for (const file of req.files) {
+            if (file?.path && fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
         }
 
         const vehicle = await Vehicle.create({
             owner,
+            // ownerName: ownerDoc.name,
             vehicleName,
             vehicleType,
             brand,
             model,
             description,
-            price,
+            pricePerDay,
             location,
             images: normalizedImages,
             isAvailable,
@@ -79,11 +88,13 @@ export const createVehicle = async (req, res) => {
 
 export const getAllVehicles = async (req, res) => {
     try {
-        const vehicles = await Vehicle.find().sort({ createdAt: -1 });
-        if (!vehicles || vehicles.length === 0){
-            return res.status(400).json({message: "Vehicle data not found!"});
+        const vehicles = await Vehicle.find()
+            .populate("owner", "name")
+            .sort({ createdAt: -1 });
+        if (!vehicles || vehicles.length === 0) {
+            return res.status(400).json({ message: "Vehicle data not found!" });
         }
-        return res.status(200).json({message: "fetched vehicle data", vehicles});
+        return res.status(200).json({ message: "fetched vehicle data", vehicles });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Server error" });
@@ -96,7 +107,7 @@ export const getVehicleById = async (req, res) => {
         if (!mongoose.isValidObjectId(id))
             return res.status(400).json({ message: "Invalid vehicle id" });
 
-        const vehicle = await Vehicle.findById(id);
+        const vehicle = await Vehicle.findById(id).populate("owner", "name");
         if (!vehicle)
             return res.status(404).json({ message: "Vehicle not found" });
 
@@ -123,26 +134,33 @@ export const updateVehicle = async (req, res) => {
         // update text fields
         const allowedFields = [
             "vehicleName", "vehicleType", "brand", "model",
-            "description", "price", "location", "isAvailable"
+            "description", "pricePerDay", "location", "isAvailable"
         ];
         for (const field of allowedFields) {
             if (req.body[field] !== undefined) vehicle[field] = req.body[field];
         }
 
-        // handle images
-        if (req.body.images !== undefined) {
-            const nextImages = Array.isArray(req.body.images) ? req.body.images : [];
+        if (Array.isArray(req.files) && req.files.length > 0) {
+            const uploadedImages = [];
 
-            const hasInvalid = nextImages.some((img) => !img?.url || !img?.publicId);
-            if (hasInvalid)
-                return res.status(400).json({ message: "Each image must include { url, publicId }" });
+            for (const file of req.files) {
+                const result = await cloudinary.uploader.upload(file.path, {
+                    folder: "vehicle_images",
+                });
+                uploadedImages.push({
+                    url: result.secure_url,
+                    publicId: result.public_id,
+                });
+            }
 
-            if (nextImages.length === 0)
-                return res.status(400).json({ message: "Vehicle must have at least 1 image" });
+            vehicle.images = uploadedImages;
 
-            vehicle.images = nextImages;
+            for (const file of req.files) {
+                if (file?.path && fs.existsSync(file.path)) {
+                    fs.unlinkSync(file.path);
+                }
+            }
         }
-
         await vehicle.save();
         return res.status(200).json({ message: "Vehicle updated", vehicle });
     } catch (error) {

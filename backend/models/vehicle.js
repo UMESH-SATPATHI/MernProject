@@ -7,6 +7,10 @@ const vehicleSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
+        // ownerName:{
+        //     type: String,
+        //     required: true
+        // },
         vehicleName: {
             type: String,
             required: true,
@@ -29,7 +33,7 @@ const vehicleSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        price: {
+        pricePerDay: {
             type: Number,
             required: true
         },

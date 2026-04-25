@@ -5,17 +5,17 @@ const bookingSchema = new mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required:true
+            required: true
         },
         owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required:true
+            required: true
         },
         vehicle: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Vehicle",
-            required:true
+            required: true
         },
         startDate: {
             type: Date,
@@ -31,14 +31,21 @@ const bookingSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["pending", "approved", "rejected", "completed"],
-            default:"pending",
+            enum: [
+                "pending",
+                "owner_approved",
+                "confirmed",
+                "owner_rejected",
+                "completed",
+                "cancelled"
+            ],
+            default: "pending",
             required: true
         },
         paymentStatus: {
             type: String,
-            enum:["pending", "paid"],
-            default:"pending"
+            enum: ["pending", "paid"],
+            default: "pending"
         }
     },
     { timestamps: true }

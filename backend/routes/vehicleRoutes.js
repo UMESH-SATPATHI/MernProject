@@ -1,5 +1,5 @@
 import express from "express";
-import { createVehicle, getAllVehicles, updateVehicle, deleteVehicle} from "../controllers/vehicleController.js";
+import { createVehicle, getAllVehicles, updateVehicle, deleteVehicle, getVehicleById} from "../controllers/vehicleController.js";
 import { verifyToken, allowRoles } from "../controllers/authMiddleware.js";
 
 const router = express.Router();

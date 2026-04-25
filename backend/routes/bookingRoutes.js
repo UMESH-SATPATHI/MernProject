@@ -3,6 +3,7 @@ import {
     createBooking,
     updateBookingStatus,
     markBookingCompleted,
+    confirmOwnerApproval,
     getRenterBookings,
     getOwnerBookings,
     cancelBooking
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.post("/", verifyToken, allowRoles("renter"), createBooking);
 router.put("/:id/update", verifyToken, allowRoles("owner"), updateBookingStatus);
+router.put("/:id/confirm", verifyToken, allowRoles("renter"), confirmOwnerApproval);
 router.get("/renter", verifyToken, allowRoles("renter"), getRenterBookings);
 router.get("/owner", verifyToken, allowRoles("owner"), getOwnerBookings);
 router.put("/:id/cancel", verifyToken, allowRoles("renter"), cancelBooking);

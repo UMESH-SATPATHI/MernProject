@@ -92,7 +92,7 @@ export const createBooking = async (req, res) => {
 
     }
 };
-
+//this function is used by owner to approve or reject the booking request
 export const updateBookingStatus = async (req, res) => {
     try {
         const bookingId = req.params.id;
@@ -135,7 +135,7 @@ export const updateBookingStatus = async (req, res) => {
         return res.status(400).json({ message: "server error" });
     }
 };
-
+// this function can only be used by the renter to mark the booking as completed after the rental period is over
 export const markBookingCompleted = async (req,res) => {
     try{
         const { id: bookingId } = req.params;
@@ -206,6 +206,17 @@ export const cancelBooking = async (req, res) => {
             return res.status(400).json({ message: "Only pending bookings cancellable" });
         booking.status = "rejected";
         await booking.save();
+        await Notification.create(
+            {
+                sender: req.user.user_id,
+                recipient: booking.owner,
+                booking: booking._id,
+                vehicle: booking.vehicle,
+                message: "Booking has been cancelled by renter",
+                type: "booking_cancelled",
+                isRead: false
+            }
+        );
         return res.status(200).json({ message: "Booking cancelled", booking });
     } catch (error) {
         console.log(error);

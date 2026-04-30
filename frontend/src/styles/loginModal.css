@@ -1,0 +1,45 @@
+.login-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.login-modal-card {
+    width: min(100%, 560px);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    padding: 28px 24px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.login-modal-container {
+    min-width: 0;
+    height: auto;
+}
+
+.login-modal-card .signup-container {
+    min-width: 0;
+    width: auto;
+    height: auto;
+}
+
+@media (max-width: 640px) {
+    .login-modal-overlay {
+        padding: 12px;
+        align-items: flex-start;
+    }
+
+    .login-modal-card {
+        width: 100%;
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+}

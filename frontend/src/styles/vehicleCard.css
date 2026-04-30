@@ -1,0 +1,189 @@
+.vehicle-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    border: 1px solid #e6e6e6;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.vehicle-card-image-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #f4f4f4;
+    overflow: hidden;
+}
+
+.vehicle-card-update-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid hsl(37, 100%, 50%);
+    background: hsl(0, 0%, 100%);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vehicle-card-update-overlay:hover {
+    background: rgb(255, 166, 0);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.vehicle-card-update-overlay:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.vehicle-card-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vehicle-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    padding: 18px;
+}
+
+.vehicle-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.vehicle-card-title {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    color: #111;
+    font-weight: 700;
+}
+
+.vehicle-card-meta {
+    margin: 0;
+    color: #666;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+
+.vehicle-card-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #fff8f0;
+    border: 1px solid rgba(242, 140, 40, 0.18);
+}
+
+.vehicle-card-price-label {
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.vehicle-card-price {
+    color: #111;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.vehicle-card-price small {
+    margin-left: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+}
+
+.vehicle-card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.vehicle-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid #111;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vehicle-card-btn.primary {
+    background: #111;
+    color: #fff;
+}
+
+.vehicle-card-btn.secondary {
+    background: #fff;
+    color: #111;
+}
+
+.vehicle-card-update-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+.vehicle-card-btn:hover {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.vehicle-card-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.vehicle-card-update-overlay:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 480px) {
+    .vehicle-card {
+        max-width: 100%;
+    }
+
+    .vehicle-card-body {
+        padding: 16px;
+    }
+
+    .vehicle-card-actions {
+        flex-direction: column;
+    }
+
+    .vehicle-card-btn {
+        width: 100%;
+    }
+}

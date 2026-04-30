@@ -1,0 +1,144 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.app-main {
+    padding-top: 92px;
+}
+
+.nav-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: hsl(0, 0%, 0%);
+    Color: hsl(0, 0%, 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.nav-logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: hsl(0, 0%, 90%);
+    overflow: hidden;
+}
+
+.logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+a {
+    text-decoration: none;
+    color: hsl(0, 0%, 100%);
+}
+
+a:hover {
+    color: hsl(36, 100%, 50%);
+    transition: color 0.3s ease-in-out;
+}
+
+a.active {
+    color: hsl(36, 100%, 50%);
+    transition: color 0.3s ease-in-out;
+    font-weight: 500;
+}
+
+.nav-logout-btn {
+    background: none;
+    border: none;
+    color: hsl(0, 0%, 100%);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: inherit;
+    padding: 0;
+}
+
+.nav-logout-btn:hover {
+    color: hsl(36, 100%, 50%);
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.profile-name {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.profile-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(36, 100%, 50%);
+    color: hsl(0, 0%, 0%);
+    font-weight: 600;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.nav-notification {
+    margin-left: 1rem;
+}
+.notification-count{
+    position: absolute;
+    color: hsl(33, 100%, 50%);
+}

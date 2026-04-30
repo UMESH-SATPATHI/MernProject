@@ -1,0 +1,86 @@
+import { Link } from "react-router-dom";
+import updateIcon from "../assets/update-icon.png";
+import "../styles/vehicleCard.css";
+
+const VehicleCard = ({
+    vehicle,
+    onBook,
+    onDetails,
+    onUpdate,
+    bookTo,
+    detailsTo,
+    canManageVehicle = false,
+    className = "",
+}) => {
+    const imageSrc =
+        vehicle?.images?.[0]?.url ||
+        vehicle?.image ||
+        vehicle?.imageUrl ||
+        "https://via.placeholder.com/640x420?text=Vehicle+Image";
+
+    const vehicleName = vehicle?.vehicleName || vehicle?.name || "Vehicle";
+    const pricePerDay = vehicle?.pricePerDay;
+    const vehicleType = vehicle?.vehicleType || "";
+    const brand = vehicle?.brand || "";
+    const model = vehicle?.model || "";
+
+    const renderAction = (label, to, onClick, variant = "primary") => {
+        const classNameName = `vehicle-card-btn ${variant}`;
+
+        if (to) {
+            return (
+                <Link to={to} className={classNameName}>
+                    {label}
+                </Link>
+            );
+        }
+
+        return (
+            <button type="button" className={classNameName} onClick={onClick}>
+                {label}
+            </button>
+        );
+    };
+
+    return (
+        <article className={`vehicle-card ${className}`.trim()}>
+            <div className="vehicle-card-image-wrap">
+                {canManageVehicle && (
+                    <button
+                        type="button"
+                        className="vehicle-card-update-overlay"
+                        onClick={onUpdate}
+                        aria-label={`Update ${vehicleName}`}
+                    >
+                        <img src={updateIcon} alt="" className="vehicle-card-update-icon" />
+                    </button>
+                )}
+                <img src={imageSrc} alt={vehicleName} className="vehicle-card-image" />
+            </div>
+
+            <div className="vehicle-card-body">
+                <div className="vehicle-card-header">
+                    <h3 className="vehicle-card-title">{vehicleName}</h3>
+                    <p className="vehicle-card-meta">
+                        {[vehicleType, brand, model].filter(Boolean).join(" • ")}
+                    </p>
+                </div>
+
+                <div className="vehicle-card-price-row">
+                    <span className="vehicle-card-price-label">Price</span>
+                    <span className="vehicle-card-price">
+                        {pricePerDay !== undefined && pricePerDay !== null ? `₹${pricePerDay}` : "N/A"}
+                        <small>/day</small>
+                    </span>
+                </div>
+
+                <div className="vehicle-card-actions">
+                    {renderAction("Book", bookTo, onBook, "primary")}
+                    {renderAction("Details", detailsTo, onDetails, "secondary")}
+                </div>
+            </div>
+        </article>
+    );
+};
+
+export default VehicleCard;

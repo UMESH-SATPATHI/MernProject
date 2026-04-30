@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import BookingModal from "../components/BookingModal";
 import { deleteVehicle, getVehicleById } from "../services/vehicleService";
 import "../styles/vehicleDetails.css";
 
 const VehicleDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, openAuthModal } = useAuth();
     const [vehicle, setVehicle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
+    const [bookingModalOpen, setBookingModalOpen] = useState(false);
     const currentUserId = user?._id || user?.user_id || user?.id || "";
 
     const getVehicleOwnerId = (value) => value?.owner?._id || value?.owner?.id || value?.ownerId || value?.owner || "";
 
     const canManageVehicle = user?.role === "admin" || String(getVehicleOwnerId(vehicle)) === String(currentUserId);
+    const isRenter = user?.role === "renter";
+    const isVehicleOwner = String(getVehicleOwnerId(vehicle)) === String(currentUserId);
+    const canBookVehicle = isRenter && !isVehicleOwner && vehicle?.isAvailable;
 
     useEffect(() => {
         let isMounted = true;
@@ -49,15 +54,31 @@ const VehicleDetails = () => {
 
     const handleBookNow = () => {
         if (!user) {
-            window.dispatchEvent(
-                new CustomEvent("auth:login-required", {
-                    detail: { returnTo: `/vehicles/${id}` },
-                })
-            );
+            openAuthModal(`/vehicles/${id}`);
             return;
         }
 
-        setMessage("Booking flow can be connected from here next.");
+        if (user?.role !== "renter") {
+            setMessage("Only renters can book vehicles.");
+            return;
+        }
+
+        if (isVehicleOwner) {
+            setMessage("You cannot book your own vehicle.");
+            return;
+        }
+
+        if (!vehicle?.isAvailable) {
+            setMessage("This vehicle is currently not available.");
+            return;
+        }
+
+        setMessage("");
+        setBookingModalOpen(true);
+    };
+
+    const handleCloseBookingModal = () => {
+        setBookingModalOpen(false);
     };
 
     const handleDeleteVehicle = async () => {
@@ -184,9 +205,11 @@ const VehicleDetails = () => {
                     {message && <div className="vehicle-details-state success">{message}</div>}
 
                     <div className="vehicle-details-actions" id="book-section">
-                        <button type="button" className="vehicle-details-book-btn" onClick={handleBookNow}>
-                            Book Now
-                        </button>
+                        {canBookVehicle && (
+                            <button type="button" className="vehicle-details-book-btn" onClick={handleBookNow}>
+                                Book Now
+                            </button>
+                        )}
                         {canManageVehicle && (
                             <button type="button" className="vehicle-details-delete-btn" onClick={handleDeleteVehicle}>
                                 Delete Vehicle
@@ -195,6 +218,17 @@ const VehicleDetails = () => {
                     </div>
                 </div>
             </div>
+
+            {bookingModalOpen && vehicle && (
+                <BookingModal
+                    vehicle={vehicle}
+                    onClose={handleCloseBookingModal}
+                    onSuccess={() => {
+                        setBookingModalOpen(false);
+                        setMessage("Booking request sent to owner successfully.");
+                    }}
+                />
+            )}
         </div>
     );
 };

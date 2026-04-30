@@ -11,6 +11,17 @@
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
 }
 
+.vehicle-card.available {
+    border-color: #22c55e;
+    border-width: 2px;
+}
+
+.vehicle-card.unavailable {
+    border-color: #ef4444;
+    border-width: 2px;
+}
+
+
 .vehicle-card-image-wrap {
     position: relative;
     width: 100%;

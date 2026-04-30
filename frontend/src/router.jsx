@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetails from "./pages/VehicleDetails";
+import Notifications from "./pages/Notifications";
+import MyItems from "./pages/MyItems";
 // import AddVehicle from "./pages/AddVehicle";
 
 const router = createBrowserRouter([
@@ -21,6 +23,9 @@ const router = createBrowserRouter([
             { path: "/signup", element: <SignUp /> },
             { path: "/login", element: <LoginPage /> },
             { path: "/profile", element: <ProtectedRoute><Profile /></ProtectedRoute> },
+            { path: "/notifications", element: <ProtectedRoute><Notifications /></ProtectedRoute> },
+            { path: "/my-bookings", element: <ProtectedRoute><MyItems /></ProtectedRoute> },
+            { path: "/my-vehicles", element: <ProtectedRoute><MyItems /></ProtectedRoute> },
             // { path: "/AddVehicle", element: <AddVehicle /> },
         ]
     }

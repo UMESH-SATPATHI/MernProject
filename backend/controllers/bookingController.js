@@ -242,6 +242,20 @@ export const getOwnerBookings = async (req, res) => {
     }
 };
 
+export const getAllBookings  = async (req,res) =>{
+    try{
+        const bookings = await Booking.find()
+        .populate("user", "name email")
+        .populate("owner", "name email")
+        .populate("vehicle", "brand model pricePerDay");
+        
+        res.status(200).json({ message: "bookings available", bookings });
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({ message: "server error" });
+    }
+}
+
 export const cancelBooking = async (req, res) => {
     try {
         const booking = await Booking.findById(req.params.id);

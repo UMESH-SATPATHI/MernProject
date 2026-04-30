@@ -146,13 +146,26 @@ export const updateProfile = async (req, res) => {
                 await cloudinary.uploader.destroy(existingUser.profileImage.publicId);
             }
             const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "profile_images"
+                folder: "profile_images",
+                resource_type: "image",
+                fetch_format: "auto",
+                quality: "auto"
             });
+            const thumbUrl = cloudinary.url(result.public_id, {
+                width: 45,
+                height: 45,
+                crop: "thumb",
+                gravity: "face",
+                fetch_format: "auto",
+                quality: "auto"
+            });
+        
             updates.profileImage = {
                 url: result.secure_url,
-                publicId: result.public_id
+                publicId: result.public_id,
+                thumbnailUrl: thumbUrl
             };
-            fs.unlinkSync(req.file.path);
+            try { fs.unlinkSync(req.file.path); } catch (e) { console.warn("cleanup failed", e.message); }
         }
 
         const user = await User.findByIdAndUpdate(
@@ -166,6 +179,24 @@ export const updateProfile = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const deleteUserByAdmin = async (req,res)=>{
+    try{
+        const user = await User.findById(req.params.id);
+        if (!user){
+            return res.status(404).json({message: "User not found!"});
+        }
+        if (user.profileImage?.publicId){
+            await cloudinary.uploader.destroy(user.profileImage.publicId);
+        }
+        await user.deleteOne();
+        return res.status(200).json({message: "User deleted by admin!"});
+
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Server error"});
     }
 }
 

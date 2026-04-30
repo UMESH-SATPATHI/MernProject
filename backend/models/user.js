@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
         publicId: {
             type: String,
         },
+        thumbnailUrl: {
+            type: String,
+        },
     },
 }, { timestamps: true })
 

@@ -6,6 +6,7 @@ import {
     confirmOwnerApproval,
     getRenterBookings,
     getOwnerBookings,
+    getAllBookings,
     cancelBooking
 } from "../controllers/bookingController.js";
 import { verifyToken, allowRoles } from "../middlewares/authMiddleware.js";
@@ -13,6 +14,7 @@ import { verifyToken, allowRoles } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.post("/", verifyToken, allowRoles("renter"), createBooking);
+router.get("/admin/all", verifyToken, allowRoles("admin"), getAllBookings);
 router.put("/:id/update", verifyToken, allowRoles("owner"), updateBookingStatus);
 router.put("/:id/confirm", verifyToken, allowRoles("renter"), confirmOwnerApproval);
 router.get("/renter", verifyToken, allowRoles("renter"), getRenterBookings);

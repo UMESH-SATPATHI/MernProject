@@ -169,6 +169,56 @@ export const updateVehicle = async (req, res) => {
     }
 };
 
+export const searchVehicles = async (req, res) => {
+    try {
+        const { searchKey } = req.body;
+
+        if (!searchKey || searchKey.trim() === "") {
+            return res.status(400).json({ message: "Search key is required" });
+        }
+
+        const vehicles = await Vehicle.find({
+            $or: [
+                {
+                    vehicleName: {
+                        $regex: searchKey,
+                        $options: "i",
+                    },
+                },
+                {
+                    vehicleType: {
+                        $regex: searchKey,
+                        $options: "i",
+                    },
+                },
+                {
+                    brand: {
+                        $regex: searchKey,
+                        $options: "i",
+                    },
+                },
+                {
+                    model: {
+                        $regex: searchKey,
+                        $options: "i",
+                    },
+                },
+                {
+                    location: {
+                        $regex: searchKey,
+                        $options: "i",
+                    },
+                },
+            ],
+        });
+
+        return res.status(200).json({ message: "Vehicles fetched", vehicles });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
 export const deleteVehicle = async (req, res) => {
     try {
         const { id } = req.params;

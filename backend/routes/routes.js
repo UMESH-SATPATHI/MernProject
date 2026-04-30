@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser, loginUser, logout, getUserProfile, updateProfile, deleteAccount, getAllUsers, removeProfileImage } from "../controllers/authController.js";
+import { registerUser, loginUser, logout, getUserProfile, updateProfile,deleteUserByAdmin, deleteAccount, getAllUsers, removeProfileImage } from "../controllers/authController.js";
 import { verifyToken, allowRoles } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/uploadMiddleware.js";
 import User from "../models/user.js";
@@ -11,6 +11,7 @@ router.post("/login", loginUser);
 router.post("/logout", logout);
 router.get("/profile", verifyToken, getUserProfile);
 router.put("/profile", verifyToken, upload.single("profileImage"), updateProfile);
+router.delete("/admin/delete/:id", verifyToken, allowRoles("admin"), deleteUserByAdmin);
 router.delete("/delete", verifyToken, deleteAccount);
 router.get("/getUsers", verifyToken, allowRoles("admin"), getAllUsers);
 router.delete("/removeProfileImage", verifyToken, removeProfileImage);

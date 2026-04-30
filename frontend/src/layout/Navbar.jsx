@@ -1,55 +1,70 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import authApi from "../services/authService";
+import logoImg from "../assets/logo.jpg";
+import "../styles/navbar.css";
 
 
 const Navbar = () => {
-    let navigate = useNavigate();
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const profileImageSrc =
+        user?.profileImage?.thumbnailUrl ||
+        user?.user?.profileImage?.thumbnailUrl ||
+        "";
 
-    async function handleLogOut() {
+    async function handleLogout() {
         try {
-            let res = await authApi.post("/logout");
+            await authApi.post("/logout");
             logout();
+            navigate("/home");
         } catch (error) {
             console.log(error.response);
         }
-    }
-
+    };
     return (
-        <nav className="navbar bg-body-tertiary">
-            <div className="container-fluid">
-                <Link className="navbar-brand" to="/">
-                    <img src="null" alt="Logo" width="30" height="24" className="d-inline-block align-text-top" />
-                    Bootstrap
+        <nav className="nav-container">
+            <div className="nav-logo-container">
+                <Link to="/home" className="nav-logo">
+                    <img src={logoImg} alt="MotoMe Logo" className="logo-image" />
                 </Link>
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <Link to="/">Home</Link>
-                    </li>
-                    {
-                        user ? (
-                            <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/" onClick={handleLogOut}>Log Out</Link>
-                                </li>
-                                <span className="nav-link" >Welcome, {user?.user?.name || user?.name || "User"}</span>
-                            </>
-                        ) : (
-                            <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/login">Login</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/signup">SignUp</Link>
-                                </li>
-                            </>
-                        )
-                    }
-                </ul>
+                <Link to="/home">MotoMe</Link>
             </div>
-        </nav>
+            <div className="nav-links">
+                <NavLink to="/home">Home</NavLink>
+                <NavLink to="/vehicles">Browse Vehicles</NavLink>
+                <NavLink to="/">My Bookings</NavLink>
+                {user ? (
+                    <>
+                        <NavLink to="/profile">Profile</NavLink>
+                        <button onClick={handleLogout} className="nav-logout-btn">Logout</button>
+                    </>
+                ) : (
+                    <>
+                        <NavLink to="/login">Login</NavLink>
+                        <NavLink to="/signup">Sign Up</NavLink>
+                    </>
+                )}
+            </div>
+            <div className="nav-profile">
+                <div className="profile-info">
+                    <span className="profile-name">Welcome, <em>{user?.name || user?.user?.name || "User"}</em></span>
+                    <Link to="/profile">
+                        {profileImageSrc ? (
+                            <img src={profileImageSrc} alt="Profile" className="profile-image" />
+                        ) : (
+                            <div className="profile-placeholder">{(user?.name || user?.user?.name)?.[0]?.toUpperCase() || "U"}</div>
+                        )}
+                    </Link>
+                </div>
+            </div>
+            <div className="nav-notification">
+                <Link to="/notifications">
+                    <span className="notification-icon">🔔</span>
+                    <span className="notification-count"></span>
+                </Link>
+            </div>
+        </nav >
     )
-}
-
-export default Navbar
+};
+export default Navbar;

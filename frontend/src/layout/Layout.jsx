@@ -1,15 +1,17 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Navbar from "./Navbar";
+import LoginModal from "../components/LoginModal";
 
 function Layout() {
     return (
         <>
             <Navbar />
-            <main>
+            <main className="app-main">
                 <Outlet />
             </main>
-            <Footer />
+            <LoginModal />
+            {/* <Footer /> */}
         </>
     )
 }

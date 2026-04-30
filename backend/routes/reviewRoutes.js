@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", verifyToken, allowRoles("renter"), createReview);
 router.get("/vehicle/:vehicleId", getVehicleReviews);
-router.put("/:id", verifyToken, allowRoles("renter"), updateReview);
+router.put("/:id", verifyToken, allowRoles("renter", "owner"), updateReview);
 router.get("/admin/all", verifyToken, allowRoles("admin"), getAllReviews);
 router.delete("/:id", verifyToken, allowRoles("renter"), deleteReview);
 

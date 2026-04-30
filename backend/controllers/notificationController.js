@@ -8,8 +8,15 @@ export const getMyNotification = async (req, res) => {
             recipient: userId,
         })
             .populate("sender", "name email")
-            .populate("vehicle", "vehicleName pricePerDay")
-            .populate("booking");
+            .populate("vehicle", "vehicleName pricePerDay vehicleType brand model location isAvailable")
+            .populate({
+                path: "booking",
+                populate: [
+                    { path: "user", select: "name email" },
+                    { path: "owner", select: "name email" },
+                    { path: "vehicle", select: "vehicleName pricePerDay vehicleType brand model location isAvailable" },
+                ],
+            });
 
         if (notifications.length === 0) {
             return res.status(404).json({ message: "No notification found" });
@@ -96,8 +103,15 @@ export const showNotifications = async (req, res) => {
             isRead: false,
         })
             .populate("sender", "name email")
-            .populate("vehicle", "vehicleName pricePerDay")
-            .populate("booking");
+            .populate("vehicle", "vehicleName pricePerDay vehicleType brand model location isAvailable")
+            .populate({
+                path: "booking",
+                populate: [
+                    { path: "user", select: "name email" },
+                    { path: "owner", select: "name email" },
+                    { path: "vehicle", select: "vehicleName pricePerDay vehicleType brand model location isAvailable" },
+                ],
+            });
 
         if (notifications.length === 0) {
             return res.status(404).json({ message: "No unread notifications found" });

@@ -262,8 +262,8 @@ export const cancelBooking = async (req, res) => {
         if (!booking) return res.status(404).json({ message: "Booking not found" });
         if (booking.user.toString() !== req.user.user_id)
             return res.status(403).json({ message: "Unauthorized" });
-        if (booking.status !== "pending")
-            return res.status(400).json({ message: "Only pending bookings cancellable" });
+        if (!["pending", "owner_approved"].includes(booking.status))
+            return res.status(400).json({ message: "Only pending or owner-approved bookings cancellable" });
         booking.status = "cancelled";
         await booking.save();
         await Notification.create(

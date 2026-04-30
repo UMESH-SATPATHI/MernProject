@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { createVehicle, getAllVehicles, searchVehicles, updateVehicle } from "../services/vehicleService";
 import VehicleCard from "../components/VehicleCard";
 import SearchCard from "../components/SearchCard";
+import BookingModal from "../components/BookingModal";
 import { useAuth } from "../context/authContext";
 import "../styles/signup.css";
 import "../styles/vehicles.css";
@@ -31,6 +32,7 @@ const Vehicles = () => {
     const [vehicleImages, setVehicleImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const [locationSearch, setLocationSearch] = useState("");
+    const [bookingModal, setBookingModal] = useState({ open: false, vehicle: null });
 
     const currentUserId = user?._id || user?.user_id || user?.id || "";
 
@@ -145,6 +147,24 @@ const Vehicles = () => {
 
         resetVehicleModalState();
         setVehicleModalMode("add");
+    };
+
+    const handleBooking = (vehicle) => {
+        if (!user) {
+            openAuthModal("/vehicles");
+            return;
+        }
+
+        if (user?.role !== "renter") {
+            setVehicleModalMessage({ type: "error", text: "Only renters can book vehicles." });
+            return;
+        }
+
+        setBookingModal({ open: true, vehicle });
+    };
+
+    const handleCloseBookingModal = () => {
+        setBookingModal({ open: false, vehicle: null });
     };
 
     const handleOpenEditVehicle = (vehicle) => {
@@ -304,13 +324,33 @@ const Vehicles = () => {
                     <VehicleCard
                         key={vehicle._id}
                         vehicle={vehicle}
-                        bookTo={`/vehicles/${vehicle._id}#book-section`}
+                        bookTo={null}
                         detailsTo={`/vehicles/${vehicle._id}`}
                         canManageVehicle={canManageVehicle(vehicle)}
+                        onBook={() => handleBooking(vehicle)}
                         onUpdate={() => handleOpenEditVehicle(vehicle)}
                     />
                 ))}
             </div>
+
+            {bookingModal.open && bookingModal.vehicle && (
+                <BookingModal
+                    vehicle={bookingModal.vehicle}
+                    onClose={handleCloseBookingModal}
+                    onSuccess={() => {
+                        // Refresh vehicles list to update availability
+                        const fetchVehicles = async () => {
+                            try {
+                                const response = await getAllVehicles();
+                                setVehicles(response.data?.vehicles || []);
+                            } catch (err) {
+                                console.error("Failed to refresh vehicles:", err);
+                            }
+                        };
+                        fetchVehicles();
+                    }}
+                />
+            )}
 
             {vehicleModalMode && (
                 <div className="vehicle-modal-overlay" role="dialog" aria-modal="true" aria-label="Vehicle form modal" onClick={handleCloseAddModal}>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 import updateIcon from "../assets/update-icon.png";
 import "../styles/vehicleCard.css";
 
@@ -12,6 +13,7 @@ const VehicleCard = ({
     canManageVehicle = false,
     className = "",
 }) => {
+    const { user } = useAuth();
     const imageSrc =
         vehicle?.images?.[0]?.url ||
         vehicle?.image ||
@@ -42,8 +44,20 @@ const VehicleCard = ({
         );
     };
 
+    // Determine which buttons to show based on user role
+    const isRenter = user?.role === "renter";
+    const isOwner = user?.role === "owner";
+    const isAdmin = user?.role === "admin";
+    const isVehicleOwner = user?._id === vehicle?.owner;
+
+    const showBookButton = isRenter && !isVehicleOwner;
+    const showDetailsButton = true; // Everyone can see details
+    const showUpdateButton = canManageVehicle && (isOwner || isAdmin);
+
+    const availabilityClass = vehicle?.isAvailable ? "available" : "unavailable";
+
     return (
-        <article className={`vehicle-card ${className}`.trim()}>
+        <article className={`vehicle-card ${availabilityClass} ${className}`.trim()}>
             <div className="vehicle-card-image-wrap">
                 {canManageVehicle && (
                     <button
@@ -65,7 +79,6 @@ const VehicleCard = ({
                         {[vehicleType, brand, model].filter(Boolean).join(" • ")}
                     </p>
                 </div>
-
                 <div className="vehicle-card-price-row">
                     <span className="vehicle-card-price-label">Price</span>
                     <span className="vehicle-card-price">
@@ -75,8 +88,8 @@ const VehicleCard = ({
                 </div>
 
                 <div className="vehicle-card-actions">
-                    {renderAction("Book", bookTo, onBook, "primary")}
-                    {renderAction("Details", detailsTo, onDetails, "secondary")}
+                    {showBookButton && renderAction("Book", bookTo, onBook, "primary")}
+                    {showDetailsButton && renderAction("Details", detailsTo, onDetails, "secondary")}
                 </div>
             </div>
         </article>

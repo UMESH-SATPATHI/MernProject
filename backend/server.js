@@ -20,7 +20,9 @@ mongoose.connect(process.env.MONGO_URI)
 const app = express();
 
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:["http://localhost:5173",
+        "https://motome.vercel.app"
+    ],
     credentials:true
 }));
 app.use(express.json());

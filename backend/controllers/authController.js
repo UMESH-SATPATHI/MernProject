@@ -40,7 +40,8 @@ export const registerUser = async (req, res) => {
         );
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
+            sameSite: "None",
             maxAge: 3600000
         });
         const userWithoutPassword = await User.findById(user._id).select("-password");
@@ -81,7 +82,8 @@ export const loginUser = async (req, res) => {
         );
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
+            sameSite: "None",
             maxAge: 3600000
         })
         res.status(200).json({ message: "Login Successful", token, user });

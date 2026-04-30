@@ -21,7 +21,7 @@ const app = express();
 
 app.use(cors({
     origin:["http://localhost:5173",
-        "https://motome.vercel.app"
+        "https://mern-project-delta-nine.vercel.app"
     ],
     credentials:true
 }));

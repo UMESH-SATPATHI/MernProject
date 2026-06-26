@@ -21,7 +21,7 @@ const app = express();
 
 app.use(cors({
     origin:["http://localhost:5173",
-        "https://mern-project-delta-nine.vercel.app"
+        "https://p2p-vehicle-rental.vercel.app"
     ],
     credentials:true
 }));

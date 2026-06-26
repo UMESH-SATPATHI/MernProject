@@ -17,14 +17,14 @@ const VehicleCard = ({
     const imageSrc =
         vehicle?.images?.[0]?.url ||
         vehicle?.image ||
-        vehicle?.imageUrl ||
-        "https://via.placeholder.com/640x420?text=Vehicle+Image";
+        vehicle?.imageUrl || "";
 
-    const vehicleName = vehicle?.vehicleName || vehicle?.name || "Vehicle";
+    const vehicleName = vehicle?.vehicleName || "Vehicle";
     const pricePerDay = vehicle?.pricePerDay;
     const vehicleType = vehicle?.vehicleType || "";
     const brand = vehicle?.brand || "";
     const model = vehicle?.model || "";
+    const location = vehicle?.location || "";
 
     const renderAction = (label, to, onClick, variant = "primary") => {
         const classNameName = `vehicle-card-btn ${variant}`;
@@ -54,10 +54,10 @@ const VehicleCard = ({
     const showDetailsButton = true; // Everyone can see details
     const showUpdateButton = canManageVehicle && (isOwner || isAdmin);
 
-    const availabilityClass = vehicle?.isAvailable ? "available" : "unavailable";
+    const availabilityClass = vehicle?.isAvailable ? "Available" : "Unavailable";
 
     return (
-        <article className={`vehicle-card ${availabilityClass} ${className}`.trim()}>
+        <article className={`vehicle-card`}>
             <div className="vehicle-card-image-wrap">
                 {canManageVehicle && (
                     <button
@@ -75,8 +75,9 @@ const VehicleCard = ({
             <div className="vehicle-card-body">
                 <div className="vehicle-card-header">
                     <h3 className="vehicle-card-title">{vehicleName}</h3>
+                    <span className={`vehicle-card-boolean ${vehicle.availabilityClass}`}>{availabilityClass}</span>
                     <p className="vehicle-card-meta">
-                        {[vehicleType, brand, model].filter(Boolean).join(" • ")}
+                        {[vehicleType, location].filter(Boolean).join(" • ")}
                     </p>
                 </div>
                 <div className="vehicle-card-price-row">

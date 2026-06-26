@@ -232,6 +232,89 @@
     transform: translateY(0);
 }
 
+.home-listing-section {
+    padding: 0 44px 56px;
+    text-align: left;
+}
+
+.home-listing-header {
+    margin-bottom: 20px;
+}
+
+.home-listing-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #121214;
+}
+
+.home-listing-header p {
+    margin-top: 8px;
+    color: #6b6770;
+}
+
+.home-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.home-vehicle-card {
+    background: #ffffff;
+    border: 1px solid #e9e7ed;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(18, 18, 20, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home-vehicle-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.home-vehicle-type {
+    background: #f3f2f5;
+    color: #232128;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-weight: 600;
+}
+
+.home-vehicle-location {
+    color: #6f6a76;
+}
+
+.home-vehicle-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111111;
+}
+
+.home-vehicle-price {
+    margin: 0;
+    font-weight: 700;
+    color: #19171d;
+}
+
+.home-vehicle-btn {
+    margin-top: auto;
+    border: 0;
+    border-radius: 10px;
+    min-height: 40px;
+    background: #111111;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.home-vehicle-btn:hover {
+    opacity: 0.92;
+}
+
 /* Responsive: Stack layout on smaller screens */
 @media (max-width: 1024px) {
     .home-hero {
@@ -312,5 +395,9 @@
 
     .hero-image-container {
         height: 300px;
+    }
+
+    .home-listing-section {
+        padding: 0 24px 40px;
     }
 }

@@ -1,6 +1,52 @@
 import "../styles/home.css";
 import { Link } from "react-router-dom";
 import heroImage from "../assets/p2p.png";
+
+const dummyVehicles = [
+    {
+        id: 1,
+        name: "Hyundai i20",
+        type: "Hatchback",
+        location: "Bhubaneswar",
+        price: "Rs 1,499/day",
+    },
+    {
+        id: 2,
+        name: "Kia Seltos",
+        type: "SUV",
+        location: "Cuttack",
+        price: "Rs 2,699/day",
+    },
+    {
+        id: 3,
+        name: "Honda City",
+        type: "Sedan",
+        location: "Puri",
+        price: "Rs 1,999/day",
+    },
+    {
+        id: 4,
+        name: "Royal Enfield Classic 350",
+        type: "Bike",
+        location: "Bhubaneswar",
+        price: "Rs 899/day",
+    },
+    {
+        id: 5,
+        name: "Mahindra Thar",
+        type: "SUV",
+        location: "Konark",
+        price: "Rs 3,199/day",
+    },
+    {
+        id: 6,
+        name: "TVS Ntorq",
+        type: "Scooter",
+        location: "Cuttack",
+        price: "Rs 599/day",
+    },
+];
+
 function Home() {
     return (
         <>
@@ -38,6 +84,27 @@ function Home() {
                     <img src={heroImage} alt="Hero" className="hero-img" />
                 </div>
             </div>
+
+            <section className="home-listing-section" aria-label="Popular vehicles">
+                <div className="home-listing-header">
+                    <h2>Popular Vehicles</h2>
+                    <p>Temporary sample listings to fill this page.</p>
+                </div>
+
+                <div className="home-card-grid">
+                    {dummyVehicles.map((vehicle) => (
+                        <article className="home-vehicle-card" key={vehicle.id}>
+                            <div className="home-vehicle-card-top">
+                                <span className="home-vehicle-type">{vehicle.type}</span>
+                                <span className="home-vehicle-location">{vehicle.location}</span>
+                            </div>
+                            <h3>{vehicle.name}</h3>
+                            <p className="home-vehicle-price">{vehicle.price}</p>
+                            <button type="button" className="home-vehicle-btn">View Details</button>
+                        </article>
+                    ))}
+                </div>
+            </section>
         </>
     );
 };

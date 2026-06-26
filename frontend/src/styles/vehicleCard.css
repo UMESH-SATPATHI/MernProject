@@ -10,18 +10,16 @@
     background: #fff;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
 }
-
-.vehicle-card.available {
-    border-color: #22c55e;
-    border-width: 2px;
+.vehicle-card-boolean.Available {
+    color: #144700;
+    border: 1px solid #144700;
+    background: #93ff93;
 }
-
-.vehicle-card.unavailable {
-    border-color: #ef4444;
-    border-width: 2px;
+.vehicle-card-boolean.Unavailable {
+    color: #850000;
+    border: 1px solid #850000;
+    background: #ff8c9d;
 }
-
-
 .vehicle-card-image-wrap {
     position: relative;
     width: 100%;
@@ -85,6 +83,7 @@
     line-height: 1.25;
     color: #111;
     font-weight: 700;
+    text-align: left;
 }
 
 .vehicle-card-meta {
@@ -92,6 +91,7 @@
     color: #666;
     font-size: 0.92rem;
     line-height: 1.4;
+    text-align: left;
 }
 
 .vehicle-card-price-row {

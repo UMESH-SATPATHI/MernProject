@@ -21,7 +21,6 @@ const Profile = () => {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
 
-    // Fetch user data on component mount
     useEffect(() => {
         getCurrentUser();
     }, []);

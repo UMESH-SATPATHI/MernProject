@@ -15,9 +15,7 @@ const Navbar = () => {
     const myItemsPath = user?.role === "owner" ? "/my-vehicles" : "/my-bookings";
     const profileImageSrc =
         user?.profileImage?.thumbnailUrl ||
-        user?.profileImage?.url ||
         user?.user?.profileImage?.thumbnailUrl ||
-        user?.user?.profileImage?.url ||
         "";
 
     const loadUnreadCount = async () => {

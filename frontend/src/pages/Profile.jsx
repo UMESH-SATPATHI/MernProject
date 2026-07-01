@@ -110,10 +110,7 @@ const Profile = () => {
                 }
             }
 
-            const response = await authApi.put("/profile", payload, hasImageChange
-                ? { headers: { "Content-Type": "multipart/form-data" } }
-                : undefined
-            );
+            const response = await authApi.put("/profile", payload);
 
             setMessage({ type: "success", text: "Profile updated successfully." });
             setIsEditing(false);

@@ -79,13 +79,14 @@ const Profile = () => {
             const hasEmailChange = formData.email !== (user?.email || "");
             const hasPasswordChange = Boolean(formData.newPassword);
             const hasImageChange = Boolean(imageFile);
+            const hasAnyChange = hasNameChange || hasEmailChange || hasPasswordChange || hasImageChange;
 
             if (hasPasswordChange && !formData.currentPassword) {
                 setMessage({ type: "error", text: "Current password is required to change password" });
                 return;
             }
 
-            if (!hasNameChange && !hasEmailChange && !hasPasswordChange && !hasImageChange) {
+            if (!hasAnyChange) {
                 setMessage({ type: "error", text: "No changes to save" });
                 return;
             }
@@ -155,7 +156,6 @@ const Profile = () => {
             email: user?.email || "",
             currentPassword: "",
             newPassword: "",
-            role: user?.role || "",
         });
         setImagePreview(user?.profileImage?.thumbnailUrl || user?.profileImage?.url || "");
         setMessage({ type: "", text: "" });
@@ -220,11 +220,7 @@ const Profile = () => {
 
                     <div className="profile-field">
                         <label>Role:</label>
-                        {isEditing ? (
-                            <input type="text" name="role" value={formData.role} onChange={handleInputChange} />
-                        ) : (
-                            <span>{user?.role}</span>
-                        )}
+                        <span>{user?.role}</span>
                     </div>
 
                     {isEditing && (

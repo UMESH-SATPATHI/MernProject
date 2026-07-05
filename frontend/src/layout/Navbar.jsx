@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/authContext";
 import authApi from "../services/authService";
 import { getUnreadNotifications } from "../services/notificationService";
-import logoImg from "../assets/logo.jpg";
+import logoImg from "../../dist/motome.ico";
 import "../styles/navbar.css";
 
 

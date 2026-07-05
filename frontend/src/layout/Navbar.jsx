@@ -82,7 +82,7 @@ const Navbar = () => {
             </div>
             <div className="nav-profile">
                 <div className="profile-info">
-                    <span className="profile-name">Welcome, <em>{user?.name || user?.user?.name || "User"}</em></span>
+                    <span className="profile-name">Welcome, <em>{user?.name.split(" ")[0] || user?.user?.name.split(" ")[0] || "User"}</em></span>
                     <Link to="/profile">
                         {profileImageSrc ? (
                             <img src={profileImageSrc} alt="Profile" className="profile-image" />

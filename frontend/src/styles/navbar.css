@@ -107,10 +107,7 @@ a.active {
 
 .profile-name {
     font-size: 0.95rem;
-    white-space: nowrap;
     max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .profile-image {
@@ -119,6 +116,7 @@ a.active {
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
+    display: block;
 }
 
 .profile-placeholder {

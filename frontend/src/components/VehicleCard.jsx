@@ -46,7 +46,6 @@ const VehicleCard = ({
             <button type="button" className={classNameName} onClick={
                 (e) => {
                     e.stopPropagation();
-                    onClick?.();
                 }}>
                 {label}
             </button>

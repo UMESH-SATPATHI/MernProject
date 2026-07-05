@@ -107,7 +107,9 @@ a.active {
 
 .profile-name {
     font-size: 0.95rem;
-    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-image {

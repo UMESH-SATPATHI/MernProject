@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import updateIcon from "../assets/update-icon.png";
 import "../styles/vehicleCard.css";
@@ -14,6 +14,7 @@ const VehicleCard = ({
     className = "",
 }) => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const imageSrc =
         vehicle?.images?.[0]?.url ||
         vehicle?.image ||
@@ -57,13 +58,16 @@ const VehicleCard = ({
     const availabilityClass = vehicle?.isAvailable ? "Available" : "Unavailable";
 
     return (
-        <article className={`vehicle-card`}>
+        <article className={`vehicle-card`} onClick={navigate(detailsTo)} style={{ cursor: "pointer" }}>
             <div className="vehicle-card-image-wrap">
                 {canManageVehicle && (
                     <button
                         type="button"
                         className="vehicle-card-update-overlay"
-                        onClick={onUpdate}
+                        onClick={(e) => {
+                            e.stopPropagation(); // Prevent the card click event
+                            onUpdate();
+                        }}
                         aria-label={`Update ${vehicleName}`}
                     >
                         <img src={updateIcon} alt="" className="vehicle-card-update-icon" />

@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import { useAuth } from "../context/authContext";
 import updateIcon from "../assets/update-icon.png";
 import "../styles/vehicleCard.css";
@@ -15,6 +17,8 @@ const VehicleCard = ({
 }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const cardRef = useRef(null);
+    const imageRef = useRef(null);
     const imageSrc =
         vehicle?.images?.[0]?.url ||
         vehicle?.image ||
@@ -32,14 +36,18 @@ const VehicleCard = ({
 
         if (to) {
             return (
-                <Link to={to} className={classNameName}>
+                <Link to={to} className={classNameName} onClick={(e) => { e.stopPropagation() }}>
                     {label}
                 </Link>
             );
         }
 
         return (
-            <button type="button" className={classNameName} onClick={onClick}>
+            <button type="button" className={classNameName} onClick={
+                (e) => {
+                    e.stopPropagation();
+                    onClick?.();
+                }}>
                 {label}
             </button>
         );
@@ -57,8 +65,49 @@ const VehicleCard = ({
 
     const availabilityClass = vehicle?.isAvailable ? "Available" : "Unavailable";
 
+    const handleMouseEnter = () => {
+        gsap.to(cardRef.current, {
+            y: -6,
+            scale: 1.02,
+            boxShadow: "0 16px 32px rgba(0, 0, 0, 0.12)",
+            duration: 0.35,
+            ease: "back.out(1.7)",
+            overwrite: "auto",
+        });
+        gsap.to(imageRef.current, {
+            scale: 1.05,
+            duration: 0.35,
+            ease: "power2.out",
+            overwrite: "auto",
+        });
+    };
+
+    const handleMouseLeave = () => {
+        gsap.to(cardRef.current, {
+            y: 0,
+            scale: 1,
+            boxShadow: "0 10px 24px rgba(0, 0, 0, 0.05)",
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+        });
+        gsap.to(imageRef.current, {
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto",
+        });
+    };
+
     return (
-        <article className={`vehicle-card`} onClick={navigate(detailsTo)} style={{ cursor: "pointer" }}>
+        <article
+            ref={cardRef}
+            className={`vehicle-card ${className}`.trim()}
+            onClick={() => navigate(detailsTo)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{ cursor: "pointer" }}
+        >
             <div className="vehicle-card-image-wrap">
                 {canManageVehicle && (
                     <button
@@ -73,7 +122,7 @@ const VehicleCard = ({
                         <img src={updateIcon} alt="" className="vehicle-card-update-icon" />
                     </button>
                 )}
-                <img src={imageSrc} alt={vehicleName} className="vehicle-card-image" />
+                <img ref={imageRef} src={imageSrc} alt={vehicleName} className="vehicle-card-image" />
             </div>
 
             <div className="vehicle-card-body">

@@ -1,4 +1,5 @@
 import "../styles/home.css";
+import {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import heroImage from "../assets/p2p.png";
 
@@ -48,6 +49,41 @@ const dummyVehicles = [
 ];
 
 function Home() {
+    const [locationText, setLocationText] = useState("Detecting Location...");
+    const [locationError, setLocationError] = useState("");
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const city = data.address.city || data.address.town || data.address.village || data.address.county;
+                            const state = data.address.state;
+                            setLocationText(`${city}, ${state}`);
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching location data:", error);
+                            setLocationError("Unable to fetch location data.");
+                        });
+                },
+                (error) => {
+                    console.error("Error getting geolocation:", error);
+                    setLocationError("Unable to detect location.");
+                }
+            );
+        } else {
+            setLocationError("Geolocation is not supported by this browser.");
+        }   
+}, []);
+
+    const handleChangeLocation = () => {
+        setLocationError("");
+        // Logic to change location can be implemented here
+    };
+
     return (
         <>
             <nav className="home-nav">
@@ -64,10 +100,13 @@ function Home() {
                 <div className="home-hero-content">
                     <div className="location-container">
                         <span className="location-icon" aria-hidden="true"></span>
-                        <p className="location">Bhubaneswar IN</p>
-                        <button className="change-location-btn">Change Location</button>
+                        <p className="location">{locationText || "Detecting Location..."}</p>
+                        <button className="change-location-btn" onClick={handleChangeLocation}>
+                            Change Location
+                        </button>
                     </div>
-                    
+                    {locationError && <p className="location-error">{locationError}</p>}
+
                     <div className="search-container">
                         <h1 className="home-hero-title">Find Your Perfect Ride</h1>
                         <p className="home-hero-description">Discover a wide range of vehicles for rent, from cars to bikes, and book your next adventure with ease.</p>

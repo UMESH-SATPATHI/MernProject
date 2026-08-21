@@ -11,14 +11,24 @@
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
 }
 .vehicle-card-boolean.Available {
+    font-size: 0.5rem;
     color: #144700;
     border: 1px solid #144700;
-    background: #93ff93;
+    background: #b5ffb5;
+    border-radius: 25px;
+    text-align: left;
+    padding: 4px 12px;
+    width: fit-content;
 }
 .vehicle-card-boolean.Unavailable {
+    font-size: 0.5rem;
     color: #850000;
     border: 1px solid #850000;
-    background: #ff8c9d;
+    background: #ffccd4;
+    border-radius: 25px;
+    text-align: left;
+    padding: 4px 12px;
+    width: fit-content;
 }
 .vehicle-card-image-wrap {
     position: relative;
@@ -81,14 +91,14 @@
     margin: 0;
     font-size: 1.15rem;
     line-height: 1.25;
-    color: #111;
+    color: #000000;
     font-weight: 700;
     text-align: left;
 }
 
 .vehicle-card-meta {
     margin: 0;
-    color: #666;
+    color: #5d5d5d;
     font-size: 0.92rem;
     line-height: 1.4;
     text-align: left;
@@ -152,9 +162,20 @@
     color: #fff;
 }
 
+.vehicle-card-btn.primary:hover {
+    background: #000;
+    color: #ff5b14;
+    transition: ease-in-out 0.2s;
+}
+
 .vehicle-card-btn.secondary {
     background: #fff;
     color: #111;
+}
+.vehicle-card-btn.secondary:hover {
+    background: #000000;
+    color: #ff6d2e;
+    transition: ease-in-out 0.2s;
 }
 
 .vehicle-card-update-icon {

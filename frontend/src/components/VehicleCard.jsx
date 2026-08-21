@@ -127,7 +127,7 @@ const VehicleCard = ({
             <div className="vehicle-card-body">
                 <div className="vehicle-card-header">
                     <h3 className="vehicle-card-title">{vehicleName}</h3>
-                    <span className={`vehicle-card-boolean ${vehicle.availabilityClass}`}>{availabilityClass}</span>
+                    <span className={`vehicle-card-boolean ${availabilityClass}`}>{availabilityClass}</span>
                     <p className="vehicle-card-meta">
                         {[vehicleType, location].filter(Boolean).join(" • ")}
                     </p>

@@ -12,6 +12,7 @@ const Login = () => {
     let [showPassword, setShowPassword] = useState(false);
     let [message, setMessage] = useState("");
     let [error, setError] = useState(false);
+    let [loading, setLoading] = useState("");
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -32,6 +33,7 @@ const Login = () => {
         e.preventDefault();
         setMessage("");
         setError("");
+        setLoading(true);
 
         try {
             let res = await authApi.post("/login", formData);
@@ -52,6 +54,9 @@ const Login = () => {
             console.log(error.response);
             setError(true);
             setMessage(error?.response?.data?.message);
+        }
+        finally{
+            setLoading(false);
         }
     }
 
@@ -107,7 +112,7 @@ const Login = () => {
                             Forgot Password?
                         </Link>
                     </div>
-                    <button className="signup-button" type="submit">Login</button>
+                    <button className="signup-button" type="submit">{loading?"loading...":"login"}</button>
                 </form>
             </div>
             <p className="footer">Don't have an account? <Link to="/signup" className="signup-link">Sign Up here</Link></p>

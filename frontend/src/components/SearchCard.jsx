@@ -1,6 +1,6 @@
 import "../styles/vehicles.css";
 
-const SearchCard = ({ location, onLocationChange, onSearch, onClear, loading }) => {
+const SearchCard = ({ location, onLocationChange, onSearch, onClear, loading}) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         onSearch();
@@ -38,7 +38,7 @@ const SearchCard = ({ location, onLocationChange, onSearch, onClear, loading }) 
                     </div>
 
                     <button className="signup-button vehicle-search-submit-btn" type="submit" disabled={loading}>
-                        {loading ? "Searching..." : "Search"}
+                        Search
                     </button>
                 </div>
             </form>
